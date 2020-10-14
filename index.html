@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>JSON Sandbox</title>
+  </head>
+  <body>
+    <ul id="people"></ul>
+	<h1 id="picID"></h1>
+    <script>
+
+//T196871_20 Wade Av  jobId = o8Vpra1jwE
+//var url = "https://office.ikegps.com/v1/collection.json?departmentId=Nxgfww72Ct&jobId=o8Vpra1jwE";
+
+
+//T189229 O'Connor and Coxwell  Trinity jobId = iX8Xfb5qnh
+//var url = "https://office.ikegps.com/v1/collection.json?departmentId=Nxgfww72Ct&jobId=iX8Xfb5qnh";
+
+//Oak and Clarkson
+var url = "https://office.ikegps.com/v1/collection.json?departmentId=Nxgfww72Ct&jobId=H5ek5Kw008";
+var xhr = new XMLHttpRequest();
+xhr.open("GET", url);
+xhr.setRequestHeader("Authorization", "Token: r:CrRo3PhoWYuWBd0ey9r6RUpHAUrHgFZG");
+xhr.send();
+xhr.onreadystatechange = function () {
+   if (xhr.readyState === 4) {
+      console.log(xhr.status);
+      
+	  let data = JSON.parse(xhr.responseText);
+	  console.log('data');
+      console.log(data);
+   
+      var output = '';
+      let polenum ='';
+      let meaStrint ='';
+	  let picsCollection =''; //picsCollection = JSON.stringify(data[i].fields[15].value[0]);
+	  let poleMea = '';
+	  let objVal=[];	 
+	  let pString='';
+	  let mtxt='';
+	  let pv='';
+	  let pvTest='';
+	  let mTest='';
+	  let baseOffset='Base offset';
+
+
+			for(var j=0; j < data.length;j++){ //looping through each pole
+				objVal=Object.values(data[j].measurements); //get number of pics in a pole and the data
+				
+					//console.log('objVal');
+					//console.log(objVal.length);
+				pString += '<p>'+data[j].fields[0].value+':'; //Display Pole Number
+
+				//for each pic in a pole get the measurement
+				for(var k=0; k < objVal.length; k++){  //looping through each pic
+				pString += ': Pcture:'+k+'</p>';
+
+				//Display Pole zie; Pole Class; Hydro Ground; Stgreet Light Bond
+				pString += '<p> Pole Size ='+data[k].fields[10].value.title+'<br>';
+				pString += 'Pole Class ='+data[k].fields[11].value.title+'<br>';
+				pString += 'Hydro Ground ='+data[k].fields[5].value.title+'<br>';
+				pString += 'Street Light Bond ='+data[k].fields[6].value.title+'</p>';
+
+
+
+			
+					console.log('objVal');
+					console.log(objVal);				
+				    let meaValarr = objVal[k]; //pics with pole measurements. Could have more than one pics per pole
+					console.log('meaValarr');
+					console.log(meaValarr);
+							pString +='<ul>';					
+						for(var l=0;l<meaValarr.length;l++){ //looping through each measurement object to get the label and value
+						
+							
+							mTest=mtxt=meaValarr[l].label.text;
+							
+							if( mTest.length >= 1){
+							
+								mtxt=meaValarr[l].label.text;
+							}
+							else {
+								mtxt='No Label';
+							}
+							
+							
+							pvTest=meaValarr[l].value;
+							
+							if( pvTest ){
+								pv=(meaValarr[l].value).toFixed(1);
+								console.log('!!!!!!!!!!!!!!!!!!!!!!!!!'+mtxt);
+							}
+							
+							else if (mtxt == baseOffset){
+							
+								pv=(meaValarr[l].offset).toFixed(1);
+							}
+							else {
+							pv=0;
+							console.log('!!!!!!!!!!!!!!!!!!!!!!!!!'+mtxt);
+							}
+
+							pString += '<li>'+ mtxt + ' = '+ pv+ '</li>';
+							//pString +='<p>'+pv+'</p><br>';
+							
+							
+							
+							    //output += '<h1>' +polenum+ '</h1>';
+			  
+								//output += '<p>'+meaString+'</p><br>';
+						}
+						pString +='</ul>';
+						document.getElementById('picID').innerHTML = pString;
+				} 
+			}	
+
+/*
+console.log();
+console.log();
+*/
+
+			}
+
+
+   };
+
+
+    </script>
+  </body>
+</html>
