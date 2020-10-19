@@ -69,7 +69,7 @@ xhr.onreadystatechange = function () {
 
 					//for each pic in a pole get the measurement
 					for(var k=0; k < objVal.length; k++){  //looping through each pic
-						pString += ': Pcture:' +k+' <a href="'+piclink+'">Link</a> </p>';
+						pString += ': Pcture:' +k+' <a href="'+piclink+'" target="_blank">Link</a> </p>';
 						console.log(pString);
 
 						//Display Pole size; Pole Class; Hydro Ground; Stgreet Light Bond
