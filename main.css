@@ -1,0 +1,29 @@
+h1 {
+	color: orange;
+	text-algin: center;
+	
+}
+
+p {
+	font-size: 130%;
+	
+}
+
+#intro { 
+	background-color:yellow;
+	
+}
+
+.first {
+		font-size: 200%;
+}
+
+
+#intro .first {
+	color: red;
+}
+
+#intro .first em {
+	color: green;
+	
+}
