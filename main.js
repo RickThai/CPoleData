@@ -24,7 +24,7 @@ xhr.onreadystatechange = function () {
 }
 
 function jobSelect(x){
-	
+	output = document.getElementById('sortedlist').innerHTML='';
 var url = `https://office.ikegps.com/v1/collection.json?departmentId=Nxgfww72Ct&jobId=${x}`;
 
 //console.log(url);
@@ -37,8 +37,8 @@ xhr.onreadystatechange = function () {
       //console.log(xhr.status);
       
 	  let data = JSON.parse(xhr.responseText);
-	  console.log('data');
-      console.log(data);
+	  //console.log('data');
+      //console.log(data);
    
       //var output = '';
       let polenum ='';
@@ -81,7 +81,7 @@ xhr.onreadystatechange = function () {
 						let poleMarray=[];
 
 						let meaValarr = objVal[k]; //pic with pole measurements. Could have more than one pics per pole
-						console.log("Raw Data :", meaValarr);
+						//console.log("Raw Data :", meaValarr);
 
 						if(meaValarr.length>1){				
 							for(let l=0;l<meaValarr.length;l++){
@@ -107,7 +107,7 @@ xhr.onreadystatechange = function () {
 							}
 
 							//Sorting the measurement order	
-							console.log("Before Sorting: ",poleMarray);
+							//console.log("Before Sorting: ",poleMarray);
 							poleMarray.sort(function(a,b){
 										let j =Object.values(a);
 											j =j[0];
@@ -123,7 +123,7 @@ xhr.onreadystatechange = function () {
 
 							//display array in html with id sortedlist
 							//if(meaValarr.length>1){
-								console.log("After Sorting: ",poleMarray);
+								//console.log("After Sorting: ",poleMarray);
 								displaySortedList(poleMarray,pString);
 							//}
 
@@ -138,7 +138,7 @@ xhr.onreadystatechange = function () {
    }
 
 
-			console.log(" Exiting displaySortedList");
+			//console.log(" Exiting displaySortedList");
 }
 
 function displaySortedList(x, poleheader){
@@ -146,17 +146,17 @@ function displaySortedList(x, poleheader){
 
 	let htmlString =poleheader;
 
-	console.log("Inside displaySortedList");
+	//console.log("Inside displaySortedList");
 	htmlString += '<p><ul>'
 	
 		for(i=0; i<x.length;i++){	
 
 			let key=Object.keys(x[i]);
 
-			console.log("Key",key);
+			//console.log("Key",key);
 			for (j=0;j<key.length;j++){
 				z=key[j];
-				console.log("key[j]: ",z, "value: ",x[i][z]);
+				//console.log("key[j]: ",z, "value: ",x[i][z]);
 				htmlString += '<li>' +z+ ' = ' +x[i][z]+ '</li>';
 			}
 		}
@@ -175,7 +175,7 @@ function displaySortedList(x, poleheader){
 
 		output.insertAdjacentHTML('beforeend', htmlString)
 
-		console.log('Exiting DisplaySortedlist');
+		//console.log('Exiting DisplaySortedlist');
 
 }
 
