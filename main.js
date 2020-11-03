@@ -24,7 +24,7 @@ xhr.onreadystatechange = function () {
 }
 
 function jobSelect(x){
-	document.getElementById('sortedlist').innerHTML='';
+	document.getElementById('sortedlist').innerHTML='.';
 var url = `https://office.ikegps.com/v1/collection.json?departmentId=Nxgfww72Ct&jobId=${x}`;
 
 //console.log(url);
