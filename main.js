@@ -1,4 +1,4 @@
-let DivCounter=1;
+let DivCounter=0;
 var jobUrl = "https://office.ikegps.com/v1/job.json?departmentId=Nxgfww72Ct";
 var xhr = new XMLHttpRequest();
 xhr.open("GET", jobUrl);
@@ -94,14 +94,15 @@ xhr.onreadystatechange = function () {
 								
 									if(mtxt=="Base") pv=0;
 									else if (mtxt=="Base offset") pv=(meaValarr[l].offset).toFixed(1)
-									else pv=(meaValarr[l].value).toFixed(1);
+									else pv=(meaValarr[l].value).toFixed(2);
 								}
 								else {
 									mtxt='No Label';
 									pv=(meaValarr[l].value).toFixed(1);
 								}
 
-								poleMdata[mtxt]=Number(pv);
+								//poleMdata[mtxt]=((Number(pv)*10)/10).toFixed(1);
+								poleMdata[mtxt]=parseFloat(pv).toFixed(1);
 								poleMarray.push(poleMdata);
 								//poleMdata={};
 							}
@@ -127,6 +128,7 @@ xhr.onreadystatechange = function () {
 								displaySortedList(poleMarray,pString);
 							//}
 
+
 						} /*End more then just base*/	
 					} 
 					
@@ -137,7 +139,7 @@ xhr.onreadystatechange = function () {
 			}
    }
 
-
+   if (DivCounter==0) document.getElementById('measurement').innerHTML = '<br><br><br><h2>................There are no poles with measurements yet.</h2>';
 			//console.log(" Exiting displaySortedList");
 }
 
@@ -174,7 +176,7 @@ function displaySortedList(x, poleheader){
 		*/
 
 		output.insertAdjacentHTML('beforeend', htmlString)
-
+		DivCounter++;
 		//console.log('Exiting DisplaySortedlist');
 
 }
