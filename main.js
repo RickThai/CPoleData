@@ -24,7 +24,7 @@ xhr.onreadystatechange = function () {
 }
 
 function jobSelect(x){
-	output = document.getElementById('sortedlist').innerHTML='';
+	document.getElementById('sortedlist').innerHTML='';
 var url = `https://office.ikegps.com/v1/collection.json?departmentId=Nxgfww72Ct&jobId=${x}`;
 
 //console.log(url);
@@ -37,7 +37,7 @@ xhr.onreadystatechange = function () {
       //console.log(xhr.status);
       
 	  let data = JSON.parse(xhr.responseText);
-	  //console.log('data');
+	  //console.log('data from IKE');
       //console.log(data);
    
       //var output = '';
@@ -56,7 +56,30 @@ xhr.onreadystatechange = function () {
 	  let id1='';
 	  let id2='';
 	  let id3='';
+	  let poleObj={};
+	  let poleOrder=[];
+	  
+				for(i=0;i<data.length;i++){
+					let realPoleN=(data[i].fields[0].value);
+					poleObj[realPoleN]=i;
 
+
+					/*
+						let numOnly=(data[i].fields[0].value).replace(/[a-z]/ig,'');
+						let slash =numOnly.search("/");
+						
+						if(slash>0){
+							poleObj[realPoleN]=Number(numOnly.substring(0,slash));
+						    poleOrder[i]=poleObj;
+						} else {
+							poleObj[realPoleN]=Number(numOnly);
+							poleOrder[i]=poleObj;
+						}
+					*/	
+						//console.log("numOnly2 numOnly Slash",realPoleN, numOnly, slash);
+						//console.log("Pole Number",poleOrder);
+				}
+				console.log("poleContainer",poleObj);
 
 				for(var j=0; j < data.length;j++){ //looping through each pole
 					objVal=Object.values(data[j].measurements); //get number of pics in a pole and that contain measuremtn data
@@ -102,7 +125,7 @@ xhr.onreadystatechange = function () {
 								}
 
 								//poleMdata[mtxt]=((Number(pv)*10)/10).toFixed(1);
-								poleMdata[mtxt]=parseFloat(pv).toFixed(1);
+								poleMdata[mtxt]=Number(parseFloat(pv).toFixed(1));
 								poleMarray.push(poleMdata);
 								//poleMdata={};
 							}
