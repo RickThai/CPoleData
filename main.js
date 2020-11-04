@@ -1,4 +1,5 @@
 let DivCounter=0;
+let poleOrder=[];
 var jobUrl = "https://office.ikegps.com/v1/job.json?departmentId=Nxgfww72Ct";
 var xhr = new XMLHttpRequest();
 xhr.open("GET", jobUrl);
@@ -24,146 +25,173 @@ xhr.onreadystatechange = function () {
 }
 
 function jobSelect(x){
-	document.getElementById('sortedlist').innerHTML='.';
-var url = `https://office.ikegps.com/v1/collection.json?departmentId=Nxgfww72Ct&jobId=${x}`;
+	document.getElementById('sortedlist').innerHTML='';
+	var url = `https://office.ikegps.com/v1/collection.json?departmentId=Nxgfww72Ct&jobId=${x}`;
 
-//console.log(url);
-var xhr = new XMLHttpRequest();
-xhr.open("GET", url);
-xhr.setRequestHeader("Authorization", "Token: r:mVS5j2VXF6Lab1RUgxsKxImWXFkq9aVV");
-xhr.send();
-xhr.onreadystatechange = function () {
-   if (xhr.readyState === 4) {
-      //console.log(xhr.status);
-      
-	  let data = JSON.parse(xhr.responseText);
-	  //console.log('data from IKE');
-      //console.log(data);
-   
-      //var output = '';
-      let polenum ='';
-      let meaStrint ='';
-	  let picsCollection =''; //picsCollection = JSON.stringify(data[i].fields[15].value[0]);
-	  let poleMea = '';
-	  let objVal=[];	 
-	  let objKey=[];
-	 
-	  let mtxt='';
-	  let pv='';
-	  let pvTest='';
-	  let mTest='';
-	  let baseOffset='Base offset';
-	  let id1='';
-	  let id2='';
-	  let id3='';
-	  let poleObj={};
-	  let poleOrder=[];
-	  
-				for(i=0;i<data.length;i++){
-					let realPoleN=(data[i].fields[0].value);
-					poleObj[realPoleN]=i;
+	//console.log(url);
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", url);
+	xhr.setRequestHeader("Authorization", "Token: r:mVS5j2VXF6Lab1RUgxsKxImWXFkq9aVV");
+	xhr.send();
+	xhr.onreadystatechange = function () {
+		if (xhr.readyState === 4) {
+			//console.log(xhr.status);
+			
+			let data = JSON.parse(xhr.responseText);
+			console.log('data from IKE');
+			console.log(data);
+		
+			//var output = '';
+			let polenum ='';
+			let meaStrint ='';
+			let picsCollection =''; //picsCollection = JSON.stringify(data[i].fields[15].value[0]);
+			let poleMea = '';
+			let objVal=[];	 
+			let objKey=[];
+			
+			let mtxt='';
+			let pv='';
+			let pvTest='';
+			let mTest='';
+			let baseOffset='Base offset';
+			let id1='';
+			let id2='';
+			let id3='';
+			
+			
+			let tempnum='';
+		
+			for(c=0;c<data.length;c++){
+						let realPoleN=(data[c].fields[0].value);
+						//console.log(realPoleN);
+						//poleObj[realPoleN]=i;
+						let poleObj={};
 
 
-					/*
-						let numOnly=(data[i].fields[0].value).replace(/[a-z]/ig,'');
-						let slash =numOnly.search("/");
 						
-						if(slash>0){
-							poleObj[realPoleN]=Number(numOnly.substring(0,slash));
-						    poleOrder[i]=poleObj;
-						} else {
-							poleObj[realPoleN]=Number(numOnly);
-							poleOrder[i]=poleObj;
-						}
-					*/	
-						//console.log("numOnly2 numOnly Slash",realPoleN, numOnly, slash);
-						//console.log("Pole Number",poleOrder);
-				}
-				console.log("poleContainer",poleObj);
-
-				for(var j=0; j < data.length;j++){ //looping through each pole
-					objVal=Object.values(data[j].measurements); //get number of pics in a pole and that contain measuremtn data
-					objKey=Object.keys(data[j].measurements);
-					
-					//id1=data[j].id;
-					//id2=data[j].revision.id;
-					//id3=objKey[j];
-					//let piclink=`https://office.ikegps.com/v1/collection/${id1}/${id2}/${id3}_composite_meters.jpeg/`
-					
-					//Display Pole size; Pole Class; Hydro Ground; Stgreet Light Bond
-					let pString = '<h2>'+data[j].fields[0].value+'</h2>'; //Display Pole Number
-						pString += '<p> Pole Size ='+data[j].fields[10].value.title+'<br>'; //Pole size
-						pString += 'Pole Class ='+data[j].fields[11].value.title+'<br>'; //Pole class
-						pString += 'Hydro Ground ='+data[j].fields[5].value.title+'<br>'; //Hydro ground
-						pString += 'Street Light Bond ='+data[j].fields[6].value.title+'</p>'; //SL bond
-
-					//for each pic in a pic collection get the measurement
-					for(var k=0; k < objVal.length; k++){  //looping through each pic
-						//pString += ': Pcture:' +k+' <a href="'+piclink+'" target="_blank">Link</a> </p>';
-						//console.log(pString);
-						let poleMarray=[];
-
-						let meaValarr = objVal[k]; //pic with pole measurements. Could have more than one pics per pole
-						//console.log("Raw Data :", meaValarr);
-
-						if(meaValarr.length>1){				
-							for(let l=0;l<meaValarr.length;l++){
-								let poleMdata={};
+							let numOnly=(data[c].fields[0].value).replace(/[a-z]/ig,'');
+							let slash =numOnly.search("/");
+							
+							if(slash>0){
+								tempnum=Number(numOnly.substring(0,slash));
+								poleObj[tempnum]=c;
+								poleOrder.push(poleObj);
 								
-								//looping through each measurement object to get the label and value												
-								//console.log( `# of measurements:  ${meaValarr.length}`);
-								mtxt=meaValarr[l].label.text;
-								if( mtxt.length >= 1){	
-								
-									if(mtxt=="Base") pv=0;
-									else if (mtxt=="Base offset") pv=(meaValarr[l].offset).toFixed(1)
-									else pv=(meaValarr[l].value).toFixed(2);
-								}
-								else {
-									mtxt='No Label';
-									pv=(meaValarr[l].value).toFixed(1);
-								}
-
-								//poleMdata[mtxt]=((Number(pv)*10)/10).toFixed(1);
-								poleMdata[mtxt]=Number(parseFloat(pv).toFixed(1));
-								poleMarray.push(poleMdata);
-								//poleMdata={};
+							} else {
+								poleObj[Number(numOnly)]=c;
+								poleOrder.push(poleObj);
 							}
-
-							//Sorting the measurement order	
-							//console.log("Before Sorting: ",poleMarray);
-							poleMarray.sort(function(a,b){
-										let j =Object.values(a);
-											j =j[0];
-	
-										let k =Object.values(b);
-											k = k[0];
-
-										if (j> k) return -1;										
-										else if (j< k) return 1;
-										else return 0;
-										}
-									);
-
-							//display array in html with id sortedlist
-							//if(meaValarr.length>1){
-								//console.log("After Sorting: ",poleMarray);
-								displaySortedList(poleMarray,pString);
-							//}
-
-
-						} /*End more then just base*/	
-					} 
-					
-					//document.getElementById('measurement').innerHTML = pString;
-				}	
-				//document.getElementById('sortedList').innerHTML = '';
-
 			}
-   }
+			//
 
-   if (DivCounter==0) document.getElementById('measurement').innerHTML = '<br><br><br><h2>................There are no poles with measurements yet.</h2>';
-			//console.log(" Exiting displaySortedList");
+			poleOrder.sort((a,b)=>{
+				let j =Object.keys(a);
+				j =Number(j[0]);
+
+			let k =Object.keys(b);
+				k = Number(k[0]);
+
+			if (j> k) return 1;										
+			else if (j< k) return -1;
+			else return 0;
+			
+			})
+			let gg ='';
+			poleOrder.forEach(function(item){gg+=Object.values(item).join()});
+			
+			
+			
+			//console.log("After Sort",(gg.split());
+			//poleObj.sort();
+			
+
+					//console.log("poleContainer",poleObj);
+					//console.log("poleObj.values",Object.values(poleObj));
+			poleOrder.forEach(function(item){
+						let j =Number(Object.values(item));
+			//for(var j=0; j < data.length;j++){ //looping through each pole
+						objVal=Object.values(data[j].measurements); //get number of pics in a pole and that contain measuremtn data
+						objKey=Object.keys(data[j].measurements);
+						
+						//id1=data[j].id;
+						//id2=data[j].revision.id;
+						//id3=objKey[j];
+						//let piclink=`https://office.ikegps.com/v1/collection/${id1}/${id2}/${id3}_composite_meters.jpeg/`
+						
+						//Display Pole size; Pole Class; Hydro Ground; Stgreet Light Bond
+						let pString = '<h2>'+data[j].fields[0].value+'</h2>'; //Display Pole Number
+							pString += '<p> Pole Size ='+data[j].fields[10].value.title+'<br>'; //Pole size
+							pString += 'Pole Class ='+data[j].fields[11].value.title+'<br>'; //Pole class
+							pString += 'Hydro Ground ='+data[j].fields[5].value.title+'<br>'; //Hydro ground
+							pString += 'Street Light Bond ='+data[j].fields[6].value.title+'</p>'; //SL bond
+
+						//for each pic in a pic collection get the measurement
+						for(var k=0; k < objVal.length; k++){  //looping through each pic
+							//pString += ': Pcture:' +k+' <a href="'+piclink+'" target="_blank">Link</a> </p>';
+							//console.log(pString);
+							let poleMarray=[];
+
+							let meaValarr = objVal[k]; //pic with pole measurements. Could have more than one pics per pole
+							//console.log("Raw Data :", meaValarr);
+
+							if(meaValarr.length>1){				
+								for(let l=0;l<meaValarr.length;l++){
+									let poleMdata={};
+									
+									//looping through each measurement object to get the label and value												
+									//console.log( `# of measurements:  ${meaValarr.length}`);
+									mtxt=meaValarr[l].label.text;
+									if( mtxt.length >= 1){	
+									
+										if(mtxt=="Base") pv=0;
+										else if (mtxt=="Base offset") pv=(meaValarr[l].offset).toFixed(1)
+										else pv=(meaValarr[l].value).toFixed(2);
+									}
+									else {
+										mtxt='No Label';
+										pv=(meaValarr[l].value).toFixed(1);
+									}
+
+									//poleMdata[mtxt]=((Number(pv)*10)/10).toFixed(1);
+									poleMdata[mtxt]=Number(parseFloat(pv).toFixed(1));
+									poleMarray.push(poleMdata);
+									//poleMdata={};
+								}
+
+								//Sorting the measurement order	
+								//console.log("Before Sorting: ",poleMarray);
+								poleMarray.sort(function(a,b){
+											let j =Object.values(a);
+												j =j[0];
+		
+											let k =Object.values(b);
+												k = k[0];
+
+											if (j> k) return -1;										
+											else if (j< k) return 1;
+											else return 0;
+									}
+								);
+
+								//display array in html with id sortedlist
+								//if(meaValarr.length>1){
+									//console.log("After Sorting: ",poleMarray);
+									displaySortedList(poleMarray,pString);
+								//}
+
+
+							} /*End more then just base*/	
+						} 
+						
+						//document.getElementById('measurement').innerHTML = pString;
+				}	);
+			//document.getElementById('sortedList').innerHTML = '';
+
+		}
+	}
+
+	if (DivCounter==0) document.getElementById('measurement').innerHTML = '<br><br><br><h2>................There are no poles with measurements yet.</h2>';
+				//console.log(" Exiting displaySortedList");
 }
 
 function displaySortedList(x, poleheader){
