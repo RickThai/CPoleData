@@ -1,11 +1,9 @@
-let DivCounter=0;
-let poleOrder=[];
 var jobUrl = "https://office.ikegps.com/v1/job.json?departmentId=Nxgfww72Ct";
 var xhr = new XMLHttpRequest();
 xhr.open("GET", jobUrl);
 xhr.setRequestHeader("Authorization", "Token: r:mVS5j2VXF6Lab1RUgxsKxImWXFkq9aVV");
 xhr.send();
-xhr.onreadystatechange = function () {
+xhr.onreadystatechange = function () { //show job list
   if (xhr.readyState === 4) {
       //console.log(xhr.status);
       
@@ -25,7 +23,9 @@ xhr.onreadystatechange = function () {
 }
 
 function jobSelect(x){
+	let DivCounter=0;
 	document.getElementById('sortedlist').innerHTML='';
+	document.getElementById('measurement').innerHTML='';
 	var url = `https://office.ikegps.com/v1/collection.json?departmentId=Nxgfww72Ct&jobId=${x}`;
 
 	//console.log(url);
@@ -57,18 +57,13 @@ function jobSelect(x){
 			let id1='';
 			let id2='';
 			let id3='';
-			
-			
 			let tempnum='';
-		
-			for(c=0;c<data.length;c++){
+			let poleOrder=[];
+
+			for(c=0;c<data.length;c++){ //Extract all the pole number to prepare for sorting
 						let realPoleN=(data[c].fields[0].value);
-						//console.log(realPoleN);
-						//poleObj[realPoleN]=i;
-						let poleObj={};
 
-
-						
+						let poleObj={};					
 							let numOnly=(data[c].fields[0].value).replace(/[a-z]/ig,'');
 							let slash =numOnly.search("/");
 							
@@ -82,9 +77,8 @@ function jobSelect(x){
 								poleOrder.push(poleObj);
 							}
 			}
-			//
 
-			poleOrder.sort((a,b)=>{
+			poleOrder.sort((a,b)=>{//Sorting the pole number
 				let j =Object.keys(a);
 				j =Number(j[0]);
 
@@ -96,20 +90,11 @@ function jobSelect(x){
 			else return 0;
 			
 			})
-			let gg ='';
-			poleOrder.forEach(function(item){gg+=Object.values(item).join()});
-			
-			
-			
-			//console.log("After Sort",(gg.split());
-			//poleObj.sort();
-			
-
-					//console.log("poleContainer",poleObj);
-					//console.log("poleObj.values",Object.values(poleObj));
-			poleOrder.forEach(function(item){
+					
+			console.log("Sort Pole Number", poleOrder);
+			poleOrder.forEach(function(item){//looping through each pole
 						let j =Number(Object.values(item));
-			//for(var j=0; j < data.length;j++){ //looping through each pole
+						//for(var j=0; j < data.length;j++){ //looping through each pole
 						objVal=Object.values(data[j].measurements); //get number of pics in a pole and that contain measuremtn data
 						objKey=Object.keys(data[j].measurements);
 						
@@ -135,7 +120,7 @@ function jobSelect(x){
 							//console.log("Raw Data :", meaValarr);
 
 							if(meaValarr.length>1){				
-								for(let l=0;l<meaValarr.length;l++){
+								for(let l=0;l<meaValarr.length;l++){  //looping through each measurement object to get the label and value
 									let poleMdata={};
 									
 									//looping through each measurement object to get the label and value												
@@ -144,8 +129,12 @@ function jobSelect(x){
 									if( mtxt.length >= 1){	
 									
 										if(mtxt=="Base") pv=0;
-										else if (mtxt=="Base offset") pv=(meaValarr[l].offset).toFixed(1)
-										else pv=(meaValarr[l].value).toFixed(2);
+										//else if (mtxt=="Base offset") pv=(meaValarr[l].offset).toFixed(1);
+										else if (mtxt=="Base offset") { 
+											//console.log("Mtxt, l, meaValarr", mtxt, l, meaValarr);
+											pv=(meaValarr[l].offset); //.toFixed(1);
+										}
+										else pv=(meaValarr[l].value);//.toFixed(2);
 									}
 									else {
 										mtxt='No Label';
@@ -159,7 +148,6 @@ function jobSelect(x){
 								}
 
 								//Sorting the measurement order	
-								//console.log("Before Sorting: ",poleMarray);
 								poleMarray.sort(function(a,b){
 											let j =Object.values(a);
 												j =j[0];
@@ -174,25 +162,23 @@ function jobSelect(x){
 								);
 
 								//display array in html with id sortedlist
-								//if(meaValarr.length>1){
-									//console.log("After Sorting: ",poleMarray);
+									
 									displaySortedList(poleMarray,pString);
-								//}
-
-
+									DivCounter++;									
 							} /*End more then just base*/	
 						} 
-						
-						//document.getElementById('measurement').innerHTML = pString;
 				}	);
 			//document.getElementById('sortedList').innerHTML = '';
-
+			if (DivCounter == 0) noMeasurement();
 		}
 	}
-
-	if (DivCounter==0) document.getElementById('measurement').innerHTML = '<br><br><br><h2>................There are no poles with measurements yet.</h2>';
-				//console.log(" Exiting displaySortedList");
 }
+
+function noMeasurement(){
+	document.getElementById('measurement').innerHTML = `<br><br><br><h2>................There are no poles with measurements yet.</h2>`;
+
+}
+
 
 function displaySortedList(x, poleheader){
 	let output = document.getElementById('sortedlist'); 
@@ -227,7 +213,7 @@ function displaySortedList(x, poleheader){
 		*/
 
 		output.insertAdjacentHTML('beforeend', htmlString)
-		DivCounter++;
+		
 		//console.log('Exiting DisplaySortedlist');
 
 }
