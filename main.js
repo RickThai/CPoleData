@@ -24,6 +24,7 @@ xhr.onreadystatechange = function () { //show job list
 
 function jobSelect(x){
 	let DivCounter=0;
+	console.clear();
 	document.getElementById('sortedlist').innerHTML='';
 	document.getElementById('measurement').innerHTML='';
 	var url = `https://office.ikegps.com/v1/collection.json?departmentId=Nxgfww72Ct&jobId=${x}`;
@@ -97,15 +98,22 @@ function jobSelect(x){
 						//for(var j=0; j < data.length;j++){ //looping through each pole
 						objVal=Object.values(data[j].measurements); //get number of pics in a pole and that contain measuremtn data
 						objKey=Object.keys(data[j].measurements);
+
+						let lat = data[j].fields[14].value.latitude;
+						let long = data[j].fields[14].value.longitude;
+						let accuracy = data[j].fields[14].value.accuracy;
 						
+						console.log("lat: Long:", lat, long);
+						let loc = `<a href="https://google.com/maps?q=${lat},${long}" target="popup">Loc</a>`;
 						//id1=data[j].id;
 						//id2=data[j].revision.id;
 						//id3=objKey[j];
 						//let piclink=`https://office.ikegps.com/v1/collection/${id1}/${id2}/${id3}_composite_meters.jpeg/`
 						
 						//Display Pole size; Pole Class; Hydro Ground; Stgreet Light Bond
-						let pString = '<h2>'+data[j].fields[0].value+'</h2>'; //Display Pole Number
-							pString += '<p> Pole Size ='+data[j].fields[10].value.title+'<br>'; //Pole size
+						let pString = '<h2>'+data[j].fields[0].value+" --> "+loc+'</h2>'; //Display Pole Number
+							pString +='<p> Location Accuracy ='+accuracy+'<br>';
+							pString += 'Pole Size ='+data[j].fields[10].value.title+'<br>'; //Pole size
 							pString += 'Pole Class ='+data[j].fields[11].value.title+'<br>'; //Pole class
 							pString += 'Hydro Ground ='+data[j].fields[5].value.title+'<br>'; //Hydro ground
 							pString += 'Street Light Bond ='+data[j].fields[6].value.title+'</p>'; //SL bond
