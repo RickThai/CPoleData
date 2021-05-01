@@ -1,7 +1,7 @@
 var jobUrl = "https://office.ikegps.com/v1/job.json?departmentId=Nxgfww72Ct";
 var xhr = new XMLHttpRequest();
 xhr.open("GET", jobUrl);
-xhr.setRequestHeader("Authorization", "Token: r:mVS5j2VXF6Lab1RUgxsKxImWXFkq9aVV");
+xhr.setRequestHeader("Authorization", "Token: r:5O7ch36rRixibmDhtwIcTPwq2vZJt5ZL");
 xhr.send();
 xhr.onreadystatechange = function () { //show job list
   if (xhr.readyState === 4) {
