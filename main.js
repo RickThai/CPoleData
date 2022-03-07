@@ -5,7 +5,7 @@ xhr.setRequestHeader("Authorization", "Token: r:45uDjXmqyHGDN3iCPwtyjpZwmZVyPrwY
 xhr.send();
 xhr.onreadystatechange = function () { //show job list
   if (xhr.readyState === 4) {
-      //console.log(xhr.status);
+      console.log(xhr.status)
       
 	  let jobListing = JSON.parse(xhr.responseText);
 		//console.log("jobListing", jobListing);
@@ -20,6 +20,9 @@ xhr.onreadystatechange = function () { //show job list
       </select>
 	`
   }
+else
+	console.log(xhr.status)
+
 }
 
 function jobSelect(x){
